@@ -6,7 +6,7 @@ const NavItems = ({handleClick}: {handleClick?: () => void }) => {
     const user = {
         name: 'Tim',
         email: 'tim@gmail.com',
-        imageUrl: '/assets/images/davis.webp'
+        imageUrl: '/assets/images/david.webp'
     }
     return (
 
