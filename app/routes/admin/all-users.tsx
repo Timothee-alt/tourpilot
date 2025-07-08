@@ -29,7 +29,7 @@ const AllUsers = ({ loaderData}: Route.ComponentProps) => {
                         textAlign="Left"
                         template={(props: UserData) => (
                             <div className="flex items-center gap-1.5 px-4">
-                                <img src={props.imageUrl} alt="user" className="rounded-full size-8 aspect-square" />
+                                <img src={props.imageUrl} alt="user" className="rounded-full size-8 aspect-square" referrerPolicy="no-referrer"/>
                                 <span>{props.name}</span>
                             </div>
                         )}
@@ -46,12 +46,6 @@ const AllUsers = ({ loaderData}: Route.ComponentProps) => {
                         width="140"
                         textAlign="Left"
                         template={({joinedAt}: { joinedAt: string}) => formatDate(joinedAt)}
-                    />
-                    <ColumnDirective
-                        field="itineraryCreated"
-                        headerText="Voyages crées"
-                        width="130"
-                        textAlign="Left"
                     />
                     <ColumnDirective
                         field="status"

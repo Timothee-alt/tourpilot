@@ -1,3 +1,4 @@
+import './instrument.server';
 import { PassThrough } from "node:stream";
 import * as Sentry from '@sentry/react-router';
 import type {AppLoadContext, EntryContext, HandleErrorFunction} from "react-router";
