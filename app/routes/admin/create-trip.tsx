@@ -2,11 +2,13 @@ import {Header} from "../../../components";
 import {ComboBoxComponent} from "@syncfusion/ej2-react-dropdowns";
 import type { Route } from './+types/create-trip'
 import {comboBoxItems, selectItems} from "~/constants";
-import {formatKey} from "~/lib/utils";
+import {cn, formatKey} from "~/lib/utils";
 import {LayerDirective, LayersDirective, MapsComponent} from "@syncfusion/ej2-react-maps";
 import {use, useState} from "react";
 import {world_map} from "~/constants/world_map";
 import {ButtonComponent} from "@syncfusion/ej2-react-buttons";
+import type {HTMLFormMethod} from "react-router";
+import {account} from "~/appwrite/client";
 
 export const loader = async () => {
     const response = await fetch('https://restcountries.com/v3.1/all?fields=name,flag,latlng,maps');
@@ -36,7 +38,44 @@ const CreateTrip = ( {loaderData }: Route.ComponentProps) => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async () => {};
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        setLoading(true);
+
+        if(
+            !formData.country ||
+            !formData.travelStyle ||
+            !formData.country ||
+            !formData.interest ||
+            !formData.budget ||
+            !formData.groupType
+        ) {
+            setError('Remplir tous les champs');
+            setLoading(false);
+            return;
+        }
+
+        if(formData.duration < 1 || formData.duration > 10) {
+            setError('La durée doit être entre 1 et 10 jours');
+            setLoading(false);
+            return;
+        }
+        const user = await account.get();
+        if(!user.$id) {
+            console.error("Utilisateur non authentifié");
+            setLoading(false);
+            return;
+        }
+        
+        try {
+            console.log('user', user);
+            console.log('formData', formData);
+        } catch (e) {
+            console.error('Erreur de génération du voyage', e);
+        } finally {
+            setLoading(false);
+        }
+    };
     const handleChange = (key: keyof TripFormData, value: string | number ) => {
         setFormData({ ... formData, [key]: value})
     }
@@ -157,6 +196,7 @@ const CreateTrip = ( {loaderData }: Route.ComponentProps) => {
                         <ButtonComponent type="submit" className="button-class !h-12 !w-full" disabled={loading}>
                             <img
                                 src={`/assets/icons/${loading ? 'loader.svg' : 'magic-star.svg'}`}
+                                className={cn("size-5", {'animate-spin' : loading})}
                             />
                             <span className="p-16-semibold text-white">
                                 {loading ? 'En cours...' : 'Créer le voyage'}
