@@ -37,6 +37,8 @@ RÈGLES DE PRÉCISION OBLIGATOIRES :
 6. Privilégie les attractions et lieux bien documentés et reconnus
 7. Pour les prix, donne des fourchettes réalistes plutôt que des montants exacts
 8. Tout doit être en français ! rien en anglais
+9. Ne dépasse sourtout pas les 10 000 caractères
+10. Fait des recherches sur le web pour que les prix soient le plus précis possible
 
 INSTRUCTIONS SPÉCIFIQUES :
 1. Adapte l'itinéraire au budget, aux intérêts et au style de voyage fournis
@@ -57,7 +59,7 @@ RETOURNE UNIQUEMENT un JSON propre et valide (sans markdown) avec cette structur
 {
   "name": "Un titre descriptif et accrocheur pour le voyage",
   "description": "Une description engageante du voyage et de ses points forts (maximum 100 mots)",
-  "estimatedPrice": "Prix moyen le plus bas pour le voyage en USD, ex: $price",
+  "estimatedPrice": "Prix moyen le plus bas pour le voyage en EUR, ex: price€",
   "duration": ${numberOfDays},
   "budget": "${budget}",
   "travelStyle": "${travelStyle}",
@@ -126,7 +128,7 @@ RETOURNE UNIQUEMENT un JSON propre et valide (sans markdown) avec cette structur
 }`;
 
         const textResult = await genAI
-            .getGenerativeModel({ model: 'gemini-2.0-flash' })
+            .getGenerativeModel({ model: 'gemini-2.5-flash' })
             .generateContent([prompt])
 
         const trip = parseMarkdownToJson(textResult.response.text());

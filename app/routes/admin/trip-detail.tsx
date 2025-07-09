@@ -4,7 +4,7 @@ import type { Route } from "./+types/trip-detail";
 import {cn, getFirstWord, parseTripData} from "~/lib/utils";
 import {Header, InfoPill, TripCard} from "../../../components";
 import {ChipDirective, ChipListComponent, ChipsDirective} from "@syncfusion/ej2-react-buttons";
-import {index} from "@react-router/dev/routes";
+//import {index} from "@react-router/dev/routes";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const { tripId } = params;
@@ -13,14 +13,14 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
     const [trip, trips] = await Promise.all([
         getTripById(tripId),
-        getAllTrips(4, 0),
+        getAllTrips(3, 0),
     ]);
 
     return {
         trip,
         allTrips: trips.allTrips.map(({ $id, tripDetails, imageUrls}) => ({
             id: $id,
-            ... parseTripData(tripDetails),
+            ...parseTripData(tripDetails),
             imageUrls: imageUrls ?? [],
         }))
     };
@@ -84,7 +84,7 @@ const TripDetail = ({ loaderData }: Route.ComponentProps) => {
                         </ChipsDirective>
                     </ChipListComponent>
                     <ul className="flex gap-1 items-center">
-                        {Array(5).fill('null').map((_, index) => (
+                        {Array(5).fill(null).map((_, index) => (
                             <li key={index}>
                                 <img
                                     src="/assets/icons/star.svg"
@@ -148,6 +148,7 @@ const TripDetail = ({ loaderData }: Route.ComponentProps) => {
                         </div>
                     </section>
                 ))}
+
             </section>
             <section className="flex flex-col gap-6">
                 <h2 className="p-24-semibold text-dark-100">Voyages populaires</h2>
