@@ -102,12 +102,12 @@ export const comboBoxItems = {
   budget: budgetOptions,
 } as Record<keyof TripFormData, string[]>;
 
-export const userXAxis: AxisModel = { valueType: "Category", title: "Day" };
+export const userXAxis: AxisModel = { valueType: "Category", title: "Jour" };
 export const useryAxis: AxisModel = {
   minimum: 0,
   maximum: 10,
   interval: 2,
-  title: "Count",
+  title: "Nombre",
 };
 
 export const tripXAxis: AxisModel = {
