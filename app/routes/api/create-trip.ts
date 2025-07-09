@@ -36,6 +36,7 @@ RÈGLES DE PRÉCISION OBLIGATOIRES :
 5. Évite les détails trop spécifiques qui pourraient être inexacts (prix exacts, horaires précis)
 6. Privilégie les attractions et lieux bien documentés et reconnus
 7. Pour les prix, donne des fourchettes réalistes plutôt que des montants exacts
+8. Tout doit être en français ! rien en anglais
 
 INSTRUCTIONS SPÉCIFIQUES :
 1. Adapte l'itinéraire au budget, aux intérêts et au style de voyage fournis
@@ -100,26 +101,26 @@ RETOURNE UNIQUEMENT un JSON propre et valide (sans markdown) avec cette structur
           "time": "Matin",
           "description": "🏰 Description factuelle de l'activité matinale avec emoji approprié",
           "duration": "durée approximative (ex: 2-3 heures)",
-          "cost": "fourchette de prix (ex: 15-25 USD)",
+          "cost": "fourchette de prix (ex: 15-25 EUR)",
           "tips": "conseil pratique vérifiable (ex: réserver à l'avance recommandé)"
         },
         {
           "time": "Après-midi",
           "description": "🖼️ Description factuelle de l'activité d'après-midi avec emoji approprié",
           "duration": "durée approximative (ex: 2-3 heures)",
-          "cost": "fourchette de prix (ex: 15-25 USD)",
+          "cost": "fourchette de prix (ex: 15-25 EUR)",
           "tips": "conseil pratique vérifiable (ex: fermé le lundi)"
         },
         {
           "time": "Soir",
           "description": "🍷 Description factuelle de l'activité du soir avec emoji approprié",
           "duration": "durée approximative (ex: 2-3 heures)",
-          "cost": "fourchette de prix (ex: 15-25 USD)",
+          "cost": "fourchette de prix (ex: 15-25 EUR)",
           "tips": "conseil pratique vérifiable (ex: réservation recommandée)"
         }
       ],
       "transportation": "moyens de transport pour cette journée",
-      "estimatedDailyCost": "fourchette de coût pour cette journée (ex: 80-120 USD)"
+      "estimatedDailyCost": "fourchette de coût pour cette journée (ex: 80-120 EUR)"
     }
   ]
 }`;
