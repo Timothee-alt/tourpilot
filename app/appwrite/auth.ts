@@ -84,7 +84,8 @@ export const logoutUser = async () => {
 export const getUser = async () => {
     try {
         const user = await account.get();
-        if (!user) return redirect("/sign-in");
+
+        if (!user.$id) return null; // pas connecté
 
         const { documents } = await database.listDocuments(
             appwriteConfig.databaseId,
@@ -95,10 +96,13 @@ export const getUser = async () => {
             ]
         );
 
-        return documents.length > 0 ? documents[0] : redirect("/sign-in");
-    } catch (error) {
+        return documents.length > 0 ? documents[0] : null;
+    } catch (error: any) {
+        if (error.code === 401) {
+            return null;
+        }
         console.error("Error fetching user:", error);
-        return null;
+        throw error;
     }
 };
 
