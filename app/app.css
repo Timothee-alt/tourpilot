@@ -404,7 +404,7 @@
     @apply flex justify-between items-center;
   }
   .p-72-bold {
-    @apply text-5xl md:text-7xl font-bold;
+    @apply text-4xl md:text-5xl font-bold;
   }
   .p-40-semibold {
     @apply text-3xl md:text-[40px] md:leading-[44px] font-semibold;

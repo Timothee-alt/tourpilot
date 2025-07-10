@@ -113,7 +113,7 @@ const TripDetail = ({ loaderData }: Route.ComponentProps) => {
                         </h3>
                         <p>{budget}, {groupType} et {interests}</p>
                     </article>
-                    <h2>{estimatedPrice}</h2>
+                    <h2>{estimatedPrice}€</h2>
                 </section>
                 <p className="text-sm md:text-lg font-normal text-dark-400">{description}</p>
                 <ul className="itinerary">

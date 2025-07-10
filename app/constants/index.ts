@@ -48,13 +48,13 @@ export const chartOneData: object[] = [
     y3: 1.8,
   },
   {
-    x: "May",
+    x: "Mai",
     y1: 1.8,
     y2: 2.5,
     y3: 2.0,
   },
   {
-    x: "Jun",
+    x: "Juin",
     y1: 2.0,
     y2: 2.8,
     y3: 2.5,
@@ -62,31 +62,31 @@ export const chartOneData: object[] = [
 ];
 
 export const travelStyles = [
-  "Relaxed",
-  "Luxury",
-  "Adventure",
-  "Cultural",
-  "Nature & Outdoors",
-  "City Exploration",
+  "Détente",
+  "Luxe",
+  "Aventure",
+  "Culturel",
+  "Nature & Plein air",
+  "Exploration urbaine",
 ];
 
 export const interests = [
-  "Food & Culinary",
-  "Historical Sites",
-  "Hiking & Nature Walks",
-  "Beaches & Water Activities",
-  "Museums & Art",
-  "Nightlife & Bars",
-  "Photography Spots",
+  "Gastronomie & cuisine",
+  "Sites historiques",
+  "Randonnées & balades en nature",
+  "Plages & activités nautiques",
+  "Musées & art",
+  "Vie nocturne & bars",
+  "Lieux pour la photographie",
   "Shopping",
-  "Local Experiences",
+  "Expériences locales",
 ];
 
-export const budgetOptions = ["Budget", "Mid-range", "Luxury", "Premium"];
+export const budgetOptions = ["Économique", "Milieu de gamme", "Luxe", "Premium"];
 
-export const groupTypes = ["Solo", "Couple", "Family", "Friends", "Business"];
+export const groupTypes = ["Solo", "Couple", "Famille", "Amis", "Affaires"];
 
-export const footers = ["Terms & Condition", "Privacy Policy"];
+export const footers = ["Conditions générales", "Politique de confidentialité"];
 
 export const selectItems = [
   "groupType",
