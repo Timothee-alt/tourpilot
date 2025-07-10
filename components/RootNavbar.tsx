@@ -24,8 +24,8 @@ const RootNavbar = () => {
 
                 <aside>
                     {user.status === 'admin' && (
-                        <Link to="/dashboard" className={cn('text-base font-normal text-white', {"text-dark-100": location.pathname.startsWith('/travel')})}>
-                            Panneau administratif
+                        <Link to="/dashboard" className={cn('text-base font-semibold text-white', {"text-dark-100": location.pathname.startsWith('/travel')})}>
+                            Dashboard
                         </Link>
                     )}
 

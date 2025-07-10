@@ -53,7 +53,7 @@ const TravelDetail = ({ loaderData }: Route.ComponentProps) => {
             <div className="travel-div">
                 <Link to="/" className="back-link">
                     <img src="/assets/icons/arrow-left.svg" alt="back icon" />
-                    <span>Go back</span>
+                    <span>Retour</span>
                 </Link>
 
 
@@ -62,12 +62,12 @@ const TravelDetail = ({ loaderData }: Route.ComponentProps) => {
                         <h1 className="p-40-semibold text-dark-100">{name}</h1>
                         <div className="flex items-center gap-5">
                             <InfoPill
-                                text={`${duration} day plan`}
+                                text={`${duration} jours`}
                                 image="/assets/icons/calendar.svg"
                             />
 
                             <InfoPill
-                                text={itinerary?.slice(0,4)
+                                text={itinerary?.slice(0,1)
                                     .map((item) => item.location).join(', ') || ''}
                                 image="/assets/icons/location-mark.svg"
                             />
@@ -126,12 +126,12 @@ const TravelDetail = ({ loaderData }: Route.ComponentProps) => {
                     <section className="title">
                         <article>
                             <h3>
-                                {duration}-Day {country} {travelStyle} Trip
+                                {duration} jours {country} {travelStyle}
                             </h3>
                             <p>{budget}, {groupType} and {interests}</p>
                         </article>
 
-                        <h2>{estimatedPrice}</h2>
+                        <h2>{estimatedPrice}€</h2>
                     </section>
 
                     <p className="text-sm md:text-lg font-normal text-dark-400">{description}</p>
@@ -174,9 +174,9 @@ const TravelDetail = ({ loaderData }: Route.ComponentProps) => {
                     <a href={paymentLink} className="flex">
                         <ButtonComponent className="button-class" type="submit">
                         <span className="p-16-semibold text-white">
-                            Pay to join the trip
+                            Paiement
                         </span>
-                            <span className="price-pill">{estimatedPrice}</span>
+                            <span className="price-pill">{estimatedPrice}€</span>
                         </ButtonComponent>
                     </a>
 
@@ -184,7 +184,7 @@ const TravelDetail = ({ loaderData }: Route.ComponentProps) => {
             </div>
 
             <section className="flex flex-col gap-6">
-                <h2 className="p-24-semibold text-dark-100">Popular Trips</h2>
+                <h2 className="p-24-semibold text-dark-100">Voyages populaires</h2>
 
                 <div className="trip-grid">
                     {allTrips.map((trip) => (
