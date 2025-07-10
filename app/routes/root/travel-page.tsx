@@ -110,7 +110,7 @@ const TravelPage = ({ loaderData }: Route.ComponentProps) => {
                             <FeaturedDestination
                                 bgImage="bg-card-2"
                                 bigCard
-                                title="Londre"
+                                title="Londres"
                                 rating={4.5}
                                 activityCount={512}
                             />
