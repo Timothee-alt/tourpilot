@@ -38,7 +38,9 @@ const NavItems = ({handleClick}: {handleClick?: () => void }) => {
                         </NavLink>
                     ))}
                 </nav>
+
                 <footer className="nav-footer">
+
                     <img src={user?.imageUrl || 'assets/images/davis.webp'} alt={user?.name || 'David'} referrerPolicy="no-referrer"/>
 
                     <article>

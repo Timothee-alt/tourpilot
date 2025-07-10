@@ -1,9 +1,9 @@
-import {type ActionFunctionArgs, data} from "react-router";
-import {GoogleGenerativeAI} from "@google/generative-ai";
-import {parseMarkdownToJson, parseTripData} from "~/lib/utils";
-import {appwriteConfig, database} from "~/appwrite/client";
-import {ID} from "appwrite";
-//import {createProduct} from "~/lib/stripe";
+import { type ActionFunctionArgs, data } from "react-router";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { parseMarkdownToJson, parseTripData } from "~/lib/utils";
+import { appwriteConfig, database } from "~/appwrite/client";
+import { ID } from "appwrite";
+import { createProduct } from "~/lib/stripe";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
     const {
@@ -40,16 +40,25 @@ RÈGLES DE PRÉCISION OBLIGATOIRES :
 9. Ne dépasse sourtout pas les 10 000 caractères
 10. Fait des recherches sur le web pour que les prix soient le plus précis possible
 
+
 INSTRUCTIONS SPÉCIFIQUES :
 1. Adapte l'itinéraire au budget, aux intérêts et au style de voyage fournis
 2. Propose des activités authentiques et variées qui reflètent la culture locale
 3. Inclus des recommandations pratiques (transport, réservations, tips locaux)
 4. Optimise la logistique pour minimiser les temps de trajet
 5. Suggère des alternatives selon les conditions météo ou budget
-6. Fournis une estimation de prix réaliste basée sur le budget indiqué
+6. Fournis une estimation réaliste du coût total en euros, en tenant compte de :
+- Hébergement (type budget/moyen/haut selon style de voyage)
+- Repas
+- Transports locaux
+- Activités et visites
 
 CONTRAINTES :
-- Prix estimé : calcule le coût total le plus bas possible en respectant le budget
+- Prix estimé : Fournis une estimation réaliste du coût total en euros, en tenant compte de :
+- Hébergement (type budget/moyen/haut selon style de voyage)
+- Repas
+- Transports locaux
+- Activités et visites
 - Activités : varie entre culture, nature, gastronomie et expériences uniques
 - Timing : respecte les horaires d'ouverture et évite la surcharge
 - Saisons : adapte les recommandations selon la période de visite
@@ -59,12 +68,12 @@ RETOURNE UNIQUEMENT un JSON propre et valide (sans markdown) avec cette structur
 {
   "name": "Un titre descriptif et accrocheur pour le voyage",
   "description": "Une description engageante du voyage et de ses points forts (maximum 100 mots)",
-  "estimatedPrice": "Prix moyen le plus bas pour le voyage en EUR, ex: price€",
+  "estimatedPrice": "Un entier en euros, ex: 1200",
   "duration": ${numberOfDays},
   "budget": "${budget}",
   "travelStyle": "${travelStyle}",
   "country": "${country}",
-  "interests": ${interests},
+  "interests": ${JSON.stringify(interests)},
   "groupType": "${groupType}",
   "bestTimeToVisit": [
     "🌸 Saison (de mois à mois) : raison de visiter à cette période",
@@ -82,16 +91,6 @@ RETOURNE UNIQUEMENT un JSON propre et valide (sans markdown) avec cette structur
     "city": "nom de la ville ou région principale",
     "coordinates": [latitude, longitude],
     "openStreetMap": "lien vers open street map de la destination"
-  },
-  "practicalInfo": {
-    "currency": "devise locale",
-    "language": "langue(s) principale(s)",
-    "timeZone": "fuseau horaire",
-    "transportation": "moyens de transport recommandés",
-    "tips": [
-      "Conseil pratique vérifié et factuel pour ce pays",
-      "Autre conseil basé sur des informations fiables"
-    ]
   },
   "itinerary": [
     {
@@ -120,18 +119,26 @@ RETOURNE UNIQUEMENT un JSON propre et valide (sans markdown) avec cette structur
           "cost": "fourchette de prix (ex: 15-25 EUR)",
           "tips": "conseil pratique vérifiable (ex: réservation recommandée)"
         }
-      ],
-      "transportation": "moyens de transport pour cette journée",
-      "estimatedDailyCost": "fourchette de coût pour cette journée (ex: 80-120 EUR)"
-    }
+      ]
+    },
+    ...
   ]
 }`;
 
         const textResult = await genAI
-            .getGenerativeModel({ model: 'gemini-2.5-flash' })
-            .generateContent([prompt])
+            .getGenerativeModel({ model: "gemini-2.5-flash" })
+            .generateContent([prompt]);
 
-        const trip = parseMarkdownToJson(textResult.response.text());
+        const rawText = textResult.response.text();
+        console.log("Gemini raw response:", rawText);
+
+        const trip = parseMarkdownToJson(rawText);
+
+        if (!trip || typeof trip !== "object") {
+            throw new Error("❌ Le contenu généré par l'IA est invalide ou non parsable.");
+        }
+
+        const cleanTrip = JSON.parse(JSON.stringify(trip)); // 🔒 Safe for Appwrite
 
         const imageResponse = await fetch(
             `https://api.unsplash.com/search/photos?query=${country} ${interests} ${travelStyle}&client_id=${unsplashApiKey}`
@@ -147,18 +154,46 @@ RETOURNE UNIQUEMENT un JSON propre et valide (sans markdown) avec cette structur
             appwriteConfig.tripCollectionId,
             ID.unique(),
             {
-                tripDetails: JSON.stringify(trip),
+                tripDetails: JSON.stringify(cleanTrip),
                 createdAt: new Date().toISOString(),
                 imageUrls,
                 userId,
             }
-        )
+        );
 
+        const tripDetail = parseTripData(result.tripDetails) as Trip;
 
+        // 🔐 Sécuriser l'accès à estimatedPrice
+        const estimated = tripDetail.estimatedPrice;
 
+        if (!estimated) {
+            throw new Error("❌ 'estimatedPrice' est manquant dans les données du voyage.");
+        }
 
-        return data({ id: result.$id })
+        const tripPrice = parseInt(String(estimated).replace(/[^\d]/g, ""), 10);
+        if (isNaN(tripPrice)) {
+            throw new Error(`❌ 'estimatedPrice' est invalide : ${estimated}`);
+        }
+
+        const paymentLink = await createProduct(
+            tripDetail.name,
+            tripDetail.description,
+            imageUrls,
+            tripPrice,
+            result.$id
+        );
+
+        await database.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.tripCollectionId,
+            result.$id,
+            {
+                payment_link: paymentLink.url,
+            }
+        );
+
+        return data({ id: result.$id });
     } catch (e) {
-        console.error('Error generating travel plan: ', e);
+        console.error("❌ Error generating travel plan:", e);
     }
-}
+};
