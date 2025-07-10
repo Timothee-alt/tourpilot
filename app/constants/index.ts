@@ -107,12 +107,12 @@ export const useryAxis: AxisModel = {
   minimum: 0,
   maximum: 10,
   interval: 2,
-  title: "Nombre",
+  title: "Nombres",
 };
 
 export const tripXAxis: AxisModel = {
   valueType: "Category",
-  title: "Travel Styles",
+  title: "Style de voyages",
   majorGridLines: { width: 0 },
 };
 
@@ -120,7 +120,7 @@ export const tripyAxis: AxisModel = {
   minimum: 0,
   maximum: 10,
   interval: 2,
-  title: "Count",
+  title: "Nombres",
 };
 
 export const CONFETTI_SETTINGS = {

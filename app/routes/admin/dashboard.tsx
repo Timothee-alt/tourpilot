@@ -58,6 +58,27 @@ export const clientLoader = async () => {
 const Dashboard = ({ loaderData }: Route.ComponentProps) => {
     const user = loaderData.user as User | null;
     const { dashboardStats, allTrips, userGrowth, tripsByTravelStyle, allUsers } = loaderData;
+
+    const trips = allTrips.map((trip) => ({
+        imageUrl: trip.imageUrls[0],
+        name: trip.name,
+        interest: trip.interests,
+    }))
+
+    const usersAndTrips = [
+        {
+            title: "Dernières inscription",
+            dataSource: allUsers,
+            field: 'count',
+            headerText: 'Voyages crées'
+        },
+        {
+            title: "Voyages basés sur les intérêts",
+            dataSource: trips,
+            field: 'interest',
+            headerText: 'Voyages crées'
+        }
+    ]
     return (
         <main className="dashboard wrapper">
             <Header
@@ -106,18 +127,20 @@ const Dashboard = ({ loaderData }: Route.ComponentProps) => {
                 </div>
             </section>
             <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                <ChartComponent id="chart-1"
-                                primaryXAxis={userXAxis}
-                                primaryYAxis={useryAxis}
-                                title="Croissance utilisateur"
-                                tooltip={{enable: true}}
+                <ChartComponent
+                    id="chart-1"
+                    primaryXAxis={userXAxis}
+                    primaryYAxis={useryAxis}
+                    title="Croissance utilisateur"
+                    tooltip={{ enable: true}}
                 >
                     <Inject services={[ColumnSeries, SplineAreaSeries, Category, DataLabel, Tooltip]} />
+
                     <SeriesCollectionDirective>
                         <SeriesDirective
                             dataSource={userGrowth}
-                            xName="Jour"
-                            yName="Nombre"
+                            xName="day"
+                            yName="count"
                             type="Column"
                             name="Column"
                             columnWidth={0.3}
@@ -125,6 +148,57 @@ const Dashboard = ({ loaderData }: Route.ComponentProps) => {
                         />
                     </SeriesCollectionDirective>
                 </ChartComponent>
+                <ChartComponent
+                    id="chart-2"
+                    primaryXAxis={tripXAxis}
+                    primaryYAxis={tripyAxis}
+                    title="Voyages tendances"
+                    tooltip={{ enable: true}}
+                >
+                    <Inject services={[ColumnSeries, SplineAreaSeries, Category, DataLabel, Tooltip]} />
+
+                    <SeriesCollectionDirective>
+                        <SeriesDirective
+                            dataSource={tripsByTravelStyle}
+                            xName="travelStyle"
+                            yName="count"
+                            type="Column"
+                            name="day"
+                            columnWidth={0.3}
+                            cornerRadius={{topLeft: 10, topRight: 10}}
+                        />
+                    </SeriesCollectionDirective>
+                </ChartComponent>
+            </section>
+            <section className="user-trip wrapper">
+                {usersAndTrips.map(({ title, dataSource, field, headerText }, i) => (
+                    <div key={i} className="flex flex-col gap-5">
+                        <h3 className="p-20-semibold text-dark-100">{title}</h3>
+
+                        <GridComponent dataSource={dataSource} gridLines="None">
+                            <ColumnsDirective>
+                                <ColumnDirective
+                                    field="name"
+                                    headerText="Nom"
+                                    width="200"
+                                    textAlign="Left"
+                                    template={(props: UserData) => (
+                                        <div className="flex items-center gap-1.5 px-4">
+                                            <img src={props.imageUrl} alt="user" className="rounded-full size-8 aspect-square" referrerPolicy="no-referrer"/>
+                                            <span>{props.name}</span>
+                                        </div>
+                                    )}
+                                />
+                                <ColumnDirective
+                                    field={field}
+                                    headerText={headerText}
+                                    width="150"
+                                    textAlign="Left"
+                                />
+                            </ColumnsDirective>
+                        </GridComponent>
+                    </div>
+                ))}
             </section>
         </main>
     )
