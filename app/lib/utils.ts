@@ -21,13 +21,21 @@ export function parseMarkdownToJson(markdownText: string): unknown | null {
         try {
             return JSON.parse(match[1]);
         } catch (error) {
-            console.error("Error parsing JSON:", error);
-            return null;
+            console.error("Error parsing JSON inside markdown block:", error);
         }
     }
-    console.error("No valid JSON found in markdown text.");
+
+    // Essayer de parser tout le texte brut en JSON
+    try {
+        return JSON.parse(markdownText);
+    } catch (error) {
+        console.error("Error parsing JSON from raw text:", error);
+    }
+
+    console.error("No valid JSON found.");
     return null;
 }
+
 
 export function parseTripData(jsonString: string): Trip | null {
     try {

@@ -103,21 +103,18 @@ RETOURNE UNIQUEMENT un JSON propre et valide (sans markdown) avec cette structur
           "description": "🏰 Description factuelle de l'activité matinale avec emoji approprié",
           "duration": "durée approximative (ex: 2-3 heures)",
           "cost": "fourchette de prix (ex: 15-25 EUR)",
-          "tips": "conseil pratique vérifiable (ex: réserver à l'avance recommandé)"
         },
         {
           "time": "Après-midi",
           "description": "🖼️ Description factuelle de l'activité d'après-midi avec emoji approprié",
           "duration": "durée approximative (ex: 2-3 heures)",
           "cost": "fourchette de prix (ex: 15-25 EUR)",
-          "tips": "conseil pratique vérifiable (ex: fermé le lundi)"
         },
         {
           "time": "Soir",
           "description": "🍷 Description factuelle de l'activité du soir avec emoji approprié",
           "duration": "durée approximative (ex: 2-3 heures)",
           "cost": "fourchette de prix (ex: 15-25 EUR)",
-          "tips": "conseil pratique vérifiable (ex: réservation recommandée)"
         }
       ]
     },
